@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+string F[22], p;
+int n, mc[2], l[22];
+long long c[111];
+
+void preprocessing(){
+  F[0] = '0';
+  F[1] = '1';
+  l[0] = 1;
+  l[1] = 1;
+  for( int i = 2 ; i <= 15 ; i++){
+    F[i] = F[i-1] + F[i-2];
+    l[i] = l[i-1] + l[i-2];
+  }
+}
+
+long long count(string s, string p){
+  int ls = s.size(), lp = p.size();
+  int res = 0;
+  for( int i = 0 ; i <= ls - lp ; i++){
+    res++;
+    for( int j = 0 ; j < lp ; j++){
+      if( p[j] != s[i+j]){
+        res--;
+        break;
+      }
+    }
+  }
+  return res;
+}
+
+long long count( int n, string p){
+  if( c[n] < 0 ){
+    c[n] = count(n-1,p) + count(n-2,p) +mc[n%2];
+  }
+  return c[n];
+}
+
+long long solve(int n ,string p){
+  int lp = p.size();
+  if( n < lp ) return 0;
+  for ( int j = 0; j <= n ; j ++) { c[ j ] = -1;}
+  int i = 1;
+  while ( l [i - 1] < lp ) { i ++;}
+  c [ i - 1] = count ( F[ i - 1] , p );
+  c [ i ] = count ( F[ i ] , p );
+  string x = F[ i ]. substr (0 , lp - 1);
+  string a =
+  F[ i - 1]. substr ( F[i - 1]. size () - ( lp - 1));
+  string b =
+  F[ i ]. substr ( F[ i ]. size () - ( lp - 1));
+  mc [ i % 2] = count ( a + x , p );
+  mc [( i + 1) % 2] = count ( b + x , p );
+  return count (n , p );
+}
+
+int main(){
+  preprocessing();
+  // for( int i = 0; i <= 10; i++){
+  //   cout << l[i] << endl;
+  // }
+  int cas = 0;
+  while( cin >> n ){
+    cin >> p;
+    long long ans = solve(n,p);
+    cas++;
+    cout << "Case " << cas << ": "<< ans << endl;
+  }
+  return 0;
+}

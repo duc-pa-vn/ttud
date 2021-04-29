@@ -1,0 +1,146 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define MAX 10000009
+int n, k;
+pair<int, int> c[MAX];
+unsigned long long re=0;
+
+bool comparePairdesc(pair<int, int> a, pair<int, int> b) {
+	return a.first > b.first;
+}
+
+bool comparePairasc(pair<int, int> a, pair<int, int> b) {
+	return a.first < b.first;
+}
+
+int main() {
+	cin >> n >> k;
+	int k1=k;
+    int type=-1;
+	for (int i = 1; i <= n; i++) {
+		cin >> c[i].first >> c[i].second;
+	}
+    c[0].first=0;
+    sort(c+1, c + n+1, comparePairdesc);
+    for( int i = 1; i<=n; i++){
+        if(c[i].first>0) continue;
+        if(c[i].first<0) {
+            type=i;
+            break;
+        }
+    }
+    if(type==-1){
+        for(int i=1; i<=n; i++){
+            re=re+abs(c[i].first-c[i-1].first);
+            if(k1>c[i].second){
+                k1-=c[i].second;
+                continue;
+            }
+            if(k1<c[i].second){
+                c[i].second-=k1;
+                long count=c[i].second/k;
+                re+=count*2*abs(c[i].first);
+                c[i].second-=k*count;
+                if(c[i].second==0){
+                    k1=0;
+                }
+                if(c[i].second!=0){
+                    re+=abs(c[i].first)*2;
+                    k1=k-c[i].second;
+                }
+                continue;
+            }
+            if(k1==c[i].second){
+                k1=0;
+                continue;
+            }
+        }
+    re+=abs(c[n].first);
+   }
+   else if(type==1){
+        sort(c+1, c + n+1, comparePairasc);
+        for(int i=1; i<=n; i++){
+            re=re+abs(c[i].first-c[i-1].first);
+            if(k1>c[i].second){
+                k1-=c[i].second;
+                continue;
+            }    
+            if(k1<c[i].second){
+                c[i].second-=k1;
+                long count=c[i].second/k;
+                re+=count*2*abs(c[i].first);
+                c[i].second-=k*count;
+                if(c[i].second==0) {
+                    k1=0;
+                }
+                if(c[i].second!=0){
+                    re+=abs(c[i].first)*2;
+                    k1=k-c[i].second;
+                }
+                continue;
+            }
+            if(k1==c[i].second){
+                k1=0;
+                continue;
+            }
+        }
+        re+=abs(c[n].first);
+   } 
+   else{
+        for(int i=1; i<type; i++){
+            re=re+abs(c[i].first-c[i-1].first);
+            if(k1>c[i].second){
+                k1-=c[i].second;
+                continue;
+            }
+            if(k1<c[i].second){
+                c[i].second-=k1;
+                long count=c[i].second/k;
+                re+=count*2*abs(c[i].first);
+                c[i].second-=k*count;
+                if(c[i].second==0) {
+                    k1=0;
+                }
+                if(c[i].second!=0){
+                    re+=abs(c[i].first)*2;
+                    k1=k-c[i].second;
+                }
+                continue;
+             }
+            if(k1==c[i].second){
+                k1=0;
+                continue;
+            }
+        }
+        sort(c+type, c + n+1, comparePairasc);
+        for(int i=type; i<=n; i++){
+            re=re+abs(c[i].first-c[i-1].first);
+            if(k1>c[i].second){
+                k1-=c[i].second;
+                continue;
+            }
+            if(k1<c[i].second){
+                c[i].second-=k1;
+                long count=c[i].second/k;
+                re+=count*2*c[i].first;
+                c[i].second-=k*count;
+                if(c[i].second==0) {
+                    k1=0;
+                }
+                if(c[i].second!=0){
+                    re+=abs(c[i].first)*2;
+                    k1=k-c[i].second;
+                }
+                continue;
+            }
+            if(k1==c[i].second){
+                k1=0;
+                continue;
+            }
+        }
+     re+=abs(c[n].first);
+   } 
+    cout << re;
+    return 0;
+}
